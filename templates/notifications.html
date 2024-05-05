@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>notification - all in social</title>
+    <!-- Load static files -->
+    {% load static %}
+    <!-- Your CSS links -->
+    <link rel="stylesheet" href="{% static 'assets/css/color.css' %}">  
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'icon.ico' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Your JavaScript links -->
+    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>  
+    <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'assets/js/uikit.js' %}"></script>
+    <script src="{% static 'assets/js/simplebar.js' %}"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+    <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+    <!-- Your custom styles -->
+    <style>
+        /* Navbar styles */
+        .navbar {
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-logo img {
+            max-height: 40px;
+        }
+        .navbar-menu {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-menu-item {
+            margin-left: 20px;
+            color: black;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        .navbar-menu-item:hover {
+            color: rgb(255, 72, 0);
+        }
+        .navbar-search {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-search input[type="text"] {
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 5px; /* Reduce margin */
+        }
+        .navbar-search button {
+            background-color: rgb(255, 72, 0);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+        /* Responsive adjustments */
+        @media screen and (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 15px;
+            }
+            .navbar-logo {
+                margin-bottom: 10px;
+            }
+            .navbar-menu {
+                flex-direction: column;
+            }
+            .navbar-menu-item {
+                margin: 5px 0;
+            }
+            .navbar-search input[type="text"] {
+                width: 100%; /* Make input full width */
+                margin-right: 0; /* Remove margin */
+                margin-bottom: 5px; /* Add space between input and button */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <!-- Logo -->
+        <div class="navbar-logo">
+            <img src="{% static 'images/logo-transparent.png' %}" alt="Logo">
+        </div>
+        <!-- Menu -->
+        <div class="navbar-menu">
+            <!-- Elias Port Channel -->
+            <select id="websiteSelect" onchange="goToWebsite(this.value)" class="navbar-menu-item">
+                <option value="" disabled selected>Select an Elias Port</option>
+                <option value="products/store_list/">Elias Store</option>
+                <option value="{% url 'presentation_videos' %}">Elias Presentation</option>
+                <option value="{% url 'group_list' %}">Elias Group and Private Chat</option>
+                <option value="food/home/">Elias Food</option>
+                <option value="{% url 'home_ai' %}">Elias AI</option>
+                <option value="music/index/">Elias Music</option>                                      
+            </select>
+            <!-- Search -->
+            <div class="navbar-search">
+                <form action="/search" method="POST">
+                    {% csrf_token %}
+                    <input id="search" type="text" name="username" placeholder="Search for username..">
+                    <button type="submit"><i id="icon_search" class="fa fa-search fa-1x"></i></button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <!-- JavaScript for navigation functionality -->
+    <script>
+        // Function to navigate to the selected website
+        function goToWebsite(selectedWebsite) {
+            // Check if a website is selected
+            if (selectedWebsite) {
+                // Redirect to the selected website
+                window.location.href = selectedWebsite;
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Notifications</title>
+</head>
+<title>All Notifications</title>
+
+
+
+<title>CodePen - Chat List</title>
+
+<link rel="canonical" href="https://codepen.io/herbertfj/pen/gOvXzG">
+
+
+
+
+<style>
+body {
+font-family: 'Arial';
+font-size: 12px;
+color: #606060;
+}
+* {
+box-sizing: border-box;
+}
+.overall {
+width: 100%;
+height: 100%;
+margin: 20px;
+}
+.chatcontainer {
+display: flex;
+height: 80px;
+width: 100%;
+position: relative;
+border-radius: 2px;
+padding: 10px;
+margin: 15px 0;
+background-color: #f0f0f0;
+box-shadow: 0 1px 3px 0 #707070, 0 1px 1px 0 #adadad;
+transition: box-shadow 0.15s ease-in-out;
+}
+.chatcontainer:hover {
+box-shadow: 0 5px 10px 0 #757575, 0 4px 5px 0 #a8a8a8;
+}
+.chatcontainer:active {
+background-color: #e0e0e0;
+}
+.chatcontainer .photo {
+display: block;
+background-repeat: no-repeat;
+width: 60px;
+height: 60px;
+background-size: cover;
+border-radius: 30px;
+border: 1px solid #eaeaea;
+top: 10px;
+left: 10px;
+cursor: pointer;
+}
+.chatcontainer .chattext {
+flex: 1;
+height: 60px;
+overflow: hidden;
+position: relative;
+margin: 0 5px;
+cursor: pointer;
+}
+.chatcontainer .chattext .status {
+position: absolute;
+top: 10px;
+left: 3px;
+width: 10px;
+height: 10px;
+border-radius: 5px;
+}
+.chatcontainer .chattext .status.-online {
+background-color: #37d316;
+}
+.chatcontainer .chattext .status.-offline {
+border: 1px solid #adadad;
+}
+.chatcontainer .chattext .chatname {
+position: absolute;
+top: 5px;
+left: 17px;
+color: #000;
+font-size: 1.5em;
+}
+.chatcontainer .chattext .chatmessage {
+top: 35px;
+position: absolute;
+width: 100%;
+height: 15px;
+line-height: 15px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+.chatcontainer .chattext .chatmessage.-unread {
+font-weight: bold;
+}
+.chatcontainer .connection {
+height: 60px;
+width: 60px;
+text-align: center;
+position: relative;
+}
+.chatcontainer .connection .time {
+position: absolute;
+top: 35px;
+}
+</style>
+
+<script>
+window.console = window.console || function(t) {};
+</script>
+
+
+<body>
+    {% if notifications %}
+        <div class="notifications">
+            {% for notification in notifications %}
+                <div class="notification">
+                    <div class="notification-header">
+                        <div class="notification-avatar">
+                            <img src="{{ notification.from_user.profile.avatar.url }} alt="User Avatar">
+                        </div>
+                        <div class="notification-info">
+                            <p class="notification-sender">{{ notification.from_user.username }}</p>
+                            <p class="notification-type">{{ notification.notification_type }}</p>
+                        </div>
+                    </div>
+                    <div class="notification-body">
+                        <p class="notification-timestamp">{{ notification.timestamp }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No notifications to display.</p>
+    {% endif %}
+</body>
+</html>
+
+
+<a style="color: rgb(255, 72, 0);" href="/" class="see-all">Back to Home</a>
+</body>
+</html>
+
+<style> body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+li {
+    background-color: #fff;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+video, img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: auto;
+}</style>

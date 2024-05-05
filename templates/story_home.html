@@ -1,0 +1,345 @@
+{% load static %}
+<link rel="shortcut icon" type="image/x-icon" href="{% static 'icon.ico' %}">
+
+<div  class="stories">
+    <!-- Display user profile image -->
+    <div class="story">
+        <div class="media-container">
+            <img class="mystory" src="{{ user_profile.profileimg.url }}" alt="User Profile Image">
+        </div>
+        <a href="create-story/"><i style="font-size: 49px; margin-left: 41px; color: rgb(255, 72, 0);" class="fa fa-plus-circle" aria-hidden="true"></i></a>
+    </div>
+
+    <!-- Loop through stories and display them -->
+    {% for story in stories %}
+    <div class="story">
+        <div class="media-container">
+            {% if story.media_type == 'image' %}
+            <img style="width: 150px; object-fit: cover; height: 350px;" class="media" src="{{ story.media_url }}" alt="" />
+            {% elif story.media_type == 'video' %}
+            <video style="width: 150px; object-fit: cover; height: 350px;" class="media" controls>
+                <source src="{{ story.media_url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            {% endif %}
+        </div>
+        <div class="author">{{ story.author }}</div>
+    </div>
+    {% endfor %}
+</div>
+            
+          </div>
+      </div>
+  
+      <div class="stories-full-view">
+          <div style="background-color: #ff8800;  height: 30px;" class="close-btn">
+              <svg style="margin-top: -px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+          </div>
+  
+          <div class="content">
+              <div class="previous-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/>
+                  </svg>
+              </div>
+  
+              <div class="story">
+                  <img src="media/hero.png" alt="" />
+                  <div class="author">Author</div>
+              </div>
+  
+              <div class="next-btn">
+                  <svg style="margin-top: -9px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+                  </svg>
+              </div>
+          </div>
+      </div>
+  </body>
+  </html>
+  <style>
+       .stories{
+        margin-top: 173px;
+        margin-bottom: 7px;
+    }
+  </style>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const stories = document.querySelectorAll(".story");
+    const storiesContainer = document.querySelector(".stories");
+    const storiesFullView = document.querySelector(".stories-full-view");
+    const closeBtn = document.querySelector(".close-btn");
+    const previousBtn = document.querySelectorAll(".previous-btn");
+    const nextBtn = document.querySelector(".next-btn");
+    let currentStoryIndex = 0;
+
+    // Event listener for clicking on a story
+    stories.forEach((story, index) => {
+        story.addEventListener("click", () => {
+            currentStoryIndex = index;
+            showFullView();
+        });
+    });
+
+    // Event listener for clicking on the close button
+    closeBtn.addEventListener("click", () => {
+        storiesFullView.classList.remove("active");
+    });
+
+    // Event listener for clicking on the previous button
+    previousBtn.forEach(btn => {
+        btn.addEventListener("click", () => {
+            if (currentStoryIndex > 0) {
+                currentStoryIndex--;
+                showFullView();
+            }
+        });
+    });
+
+    // Event listener for clicking on the next button
+    nextBtn.addEventListener("click", () => {
+        if (currentStoryIndex < stories.length - 1) {
+            currentStoryIndex++;
+            showFullView();
+        }
+    });
+
+    // Function to display the full view of a story
+    function showFullView() {
+        const fullViewStory = stories[currentStoryIndex];
+        const fullViewImg = fullViewStory.querySelector("img");
+        const fullViewAuthor = fullViewStory.querySelector(".author");
+
+        storiesFullView.querySelector(".story img").src = fullViewImg.src;
+        storiesFullView.querySelector(".author").innerText = fullViewAuthor.innerText;
+
+        storiesFullView.classList.add("active");
+
+        // Update the state of the navigation buttons
+        updateButtons();
+    }
+
+    // Function to update the state of the navigation buttons
+    function updateButtons() {
+        previousBtn.forEach(btn => {
+            btn.classList.toggle("active", currentStoryIndex > 0);
+        });
+        nextBtn.classList.toggle("active", currentStoryIndex < stories.length - 1);
+    }
+});
+  </script>
+
+  
+<style>
+
+
+    .stories-container {
+      max-width: 600px;
+      margin: 24px auto;
+      position: relative;
+    }
+    
+    .stories-container .previous-btn,
+    .stories-container .next-btn,
+    .stories-full-view .previous-btn,
+    .stories-full-view .next-btn {
+      width: 30px;
+      height: 30px;
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #ff8800;
+      color: #fff;
+      border-radius: 50%;
+      padding: 10px;
+      display: flex;
+      cursor: pointer;
+    }
+    
+    .stories-container .previous-btn,
+    .stories-container .next-btn {
+      opacity: 0;
+      pointer-events: none;
+      transition: all 400ms ease;
+    }
+    
+    .stories-container .previous-btn.active,
+    .stories-container .next-btn.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .stories-container .previous-btn,
+    .stories-full-view .previous-btn {
+      left: 8px;
+    }
+    
+    .stories-container .next-btn,
+    .stories-full-view .next-btn {
+      right: 8px;
+    }
+    
+    .stories-container .story {
+      height: 180px;
+      width: 120px;
+      flex-shrink: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+    
+    .stories-container .story img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .stories-container .stories {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .stories-container .content {
+      overflow-x: scroll;
+      scrollbar-width: none;
+      scroll-behavior: smooth;
+    }
+    
+    .stories-container .content::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .stories-container .author {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 8px 16px;
+      font-size: 15px;
+      font-family: "Roboto", sans-serif;
+      font-weight: bold;
+      color: #fff;
+      background: linear-gradient(transparent, #222 130%);
+    }
+    
+    .stories-full-view {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      place-items: center;
+    }
+    
+    .stories-full-view.active {
+      display: grid;
+    }
+    
+    .stories-full-view .close-btn {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 30px;
+      background: #444;
+      color: #fff;
+      border-radius: 50%;
+      padding: 10px;
+      display: flex;
+      z-index: 20;
+      cursor: pointer;
+    }
+    
+    .stories-full-view .content {
+      height: 90vh;
+      width: 100%;
+      max-width: 700px;
+      position: relative;
+    }
+    
+    .stories-full-view .story {
+      height: 100%;
+      text-align: center;
+    }
+    
+    .stories-full-view .story img {
+      height: 100%;
+      position: relative;
+      right: -102px;
+      aspect-ratio: 10/16;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+    
+    @media screen and (max-width: 599px) { 
+    
+        .stories-full-view .story img {
+            height: 100%;
+            width: auto;
+            position: relative;
+            top: 53px;
+            position: relative;
+      aspect-ratio: 10/16;
+      object-fit: cover;
+      border-radius: 16px;
+            right: 1px;
+        }
+        .stories-full-view .author{
+    
+    display: none;
+    
+    }
+    }
+    
+    @media screen and (min-width: 600px) and (max-width: 899px) { 
+        .stories-full-view .story img {
+            height: 100%;
+            width: auto;
+            position: relative;
+      aspect-ratio: 10/16;
+      object-fit: cover;
+      border-radius: 16px;
+            position: relative;
+            top: 53px;
+            right: -101px;
+        }
+    .stories-full-view .author{
+    
+    display: none;
+    
+    }
+    }
+    
+    
+    .stories-full-view .author {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      display: none;
+      transform: translateX(-50%);
+      font-family: "Roboto", sans-serif;
+      font-size: 18px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      padding: 4px 32px;
+      border-radius: 8px;
+    }
+    </style>
+
+    
+<style>   
+    .mystory{
+    width: 150px;
+	height: 150px;
+	object-fit: cover;
+	border-radius: 50%;
+	margin-bottom: 10px;
+    }
+
+     
+    
+</style>

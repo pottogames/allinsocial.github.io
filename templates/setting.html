@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Load static files -->
+    {% load static %}
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'icon.ico' %}">
+    <!-- Your CSS links -->
+    <link rel="stylesheet" href="{% static 'assets/css/color.css' %}">  
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Your JavaScript links -->
+    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>  
+    <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'assets/js/uikit.js' %}"></script>
+    <script src="{% static 'assets/js/simplebar.js' %}"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+    <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+    <!-- Your custom styles -->
+    <style>
+        /* Navbar styles */
+        .navbar {
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-logo img {
+            max-height: 40px;
+        }
+        .navbar-menu {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-menu-item {
+            margin-left: 20px;
+            color: black;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        .navbar-menu-item:hover {
+            color: rgb(255, 72, 0);
+        }
+        .navbar-search {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-search input[type="text"] {
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 5px; /* Reduce margin */
+        }
+        .navbar-search button {
+                background-color: rgb(255, 72, 0);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+        /* Responsive adjustments */
+        @media screen and (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 15px;
+            }
+            .navbar-logo {
+                margin-bottom: 10px;
+            }
+            .navbar-menu {
+                flex-direction: column;
+            }
+            .navbar-menu-item {
+                margin: 5px 0;
+            }
+            .navbar-search input[type="text"] {
+                width: 100%; /* Make input full width */
+                margin-right: 0; /* Remove margin */
+                margin-bottom: 5px; /* Add space between input and button */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <!-- Logo -->
+        <div class="navbar-logo">
+            <img src="{% static 'images/logo-transparent.png' %}" alt="Logo">
+        </div>
+        <!-- Menu -->
+        <div class="navbar-menu">
+            <!-- Elias Port Channel -->
+            <select id="websiteSelect" onchange="goToWebsite(this.value)" class="navbar-menu-item">
+                <option value="" disabled selected>Select an Elias Port</option>
+                <option value="products/store_list/">Elias Store</option>
+                <option value="{% url 'presentation_videos' %}">Elias Presentation</option>
+                <option value="{% url 'group_list' %}">Elias Group and Private Chat</option>
+                <option value="food/home/">Elias Food</option>
+                <option value="{% url 'home_ai' %}">Elias AI</option>
+                <option value="music/index/">Elias Music</option>                                      
+            </select>
+            <!-- Search -->
+            <div class="navbar-search">
+                <form action="/search" method="POST">
+                    {% csrf_token %}
+                    <input id="search" type="text" name="username" placeholder="Search for username..">
+                    <button type="submit"><i id="icon_search" class="fa fa-search fa-1x"></i></button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <!-- JavaScript for navigation functionality -->
+    <script>
+        // Function to navigate to the selected website
+        function goToWebsite(selectedWebsite) {
+            // Check if a website is selected
+            if (selectedWebsite) {
+                // Redirect to the selected website
+                window.location.href = selectedWebsite;
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'assets/images/favicon.png' %}" rel="icon" type="image/png">
+    <title>Settings</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+
+</head>
+
+<body>
+
+
+       
+
+          
+
+            <div class="container m-auto"> 
+
+                <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3"><a href="/">Home</a> / Account Setting for <b>{{user.username}}</b> </h1>
+                <!-- <ul class="mt-5 -mr-3 flex-nowrap lg:overflow-hidden overflow-x-scroll uk-tab">
+                    <li class="uk-active"><a href="#">General</a></li>
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Notification</a></li>
+                    <li><a href="#">Social links</a></li>
+                    <li><a href="#">Billing</a></li>
+                    <li><a href="#">Security</a></li>
+                </ul> -->
+                <br>
+                <hr>
+                <div class="grid lg:grid-cols-3 mt-12 gap-8">
+                    <div>
+                        <h3 class="text-xl mb-2"> General</h3>
+                        <p></p>
+                    </div>
+                    <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
+                        
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                       <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
+                           
+                           
+                            <div class="col-span-2">
+                                <label for=""> Profile Image</label>
+                                <img style="border-radius: 50%; margin-bottom: 13px;" width="100" height="100" src="{{user_profile.profileimg.url}}" />
+                                <input type="file" name="image" value="" class="shadow-none bg-gray-100">
+                            </div>
+                            <div class="col-span-2">
+                                <label for="about">Bio</label>  
+                                <textarea id="about" name="bio" rows="3"  class="shadow-none bg-gray-100">{{user_profile.bio}}</textarea>
+                            </div> 
+                            <div class="col-span-2">
+                                <label for=""> Location</label>
+                                <input type="text" name="location" value="{{user_profile.location}}" class="shadow-none bg-gray-100">
+                            </div>
+                            
+                       </div> 
+    
+                       <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
+                           <button  class="p-2 px-4 rounded bg-gray-50 text-red-500"> <a href="/">Cancel</a> </button>
+                           <button   style="background-color:  rgb(255, 72, 0); "  type="submit" class="button bg-blue-700"> Save </button>
+                       </div>
+                    </form>
+
+                    </div>
+
+                    <!-- <div>
+                        <h3 class="text-xl mb-2"> Privacy</h3>
+                        <p> </p>
+                    </div>
+                    <div class="bg-white rounded-md lg:shadow-lg shadow lg:p-6 p-4 col-span-2">
+
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h4> Who can follow me ?</h4>
+                                <div>  </div>
+                            </div>
+                            <div class="switches-list -mt-8 is-large">
+                                <div class="switch-container">
+                                    <label class="switch"><input type="checkbox"><span class="switch-button"></span> </label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h4> Show my activities ?</h4>
+                                <div>  </div>
+                            </div>
+                            <div class="switches-list -mt-8 is-large">
+                                <div class="switch-container">
+                                    <label class="switch"><input type="checkbox" checked><span class="switch-button"></span> </label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h4> Search engines?</h4>
+                                <div>  </div>
+                            </div>
+                            <div class="switches-list -mt-8 is-large">
+                                <div class="switch-container">
+                                    <label class="switch"><input type="checkbox"><span class="switch-button"></span> </label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h4> Allow Commenting?</h4>
+                                <div>  </div>
+                            </div>
+                            <div class="switches-list -mt-8 is-large">
+                                <div class="switch-container">
+                                    <label class="switch"><input type="checkbox"><span class="switch-button"></span> </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+    
+                    </div>
+                    <br>
+
+                </div>
+
+            </div>
+            
+        </div>
+
+    </div>
+
+
+    
+
+ <!-- Scripts
+    ================================================== -->
+    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>  
+    <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'assets/js/uikit.js' %}"></script>
+    <script src="{% static 'assets/js/simplebar.js' %}"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+
+
+    <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>
+</body>
+
+</html>
